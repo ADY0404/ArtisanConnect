@@ -1,0 +1,417 @@
+# Emergency Protocols
+
+## 🚨 When Things Go Wrong
+
+This document provides step-by-step recovery procedures for common emergencies during development.
+
+## 🔥 Critical Emergency Situations
+
+### 🚫 Level 1: Application Won't Start
+
+#### Symptoms:
+- `npm run dev` fails
+- Build errors prevent startup
+- Dependencies missing/corrupted
+
+#### Emergency Response:
+```bash
+# STEP 1: Stop and assess
+# DON'T make random changes - this makes things worse
+
+# STEP 2: Check Node and npm versions
+node --version  # Should be 18+
+npm --version   # Should be 8+
+
+# STEP 3: Clean install
+rm -rf node_modules
+rm package-lock.json
+npm install
+
+# STEP 4: Try starting again
+npm run dev
+```
+
+#### If Still Failing:
+```bash
+# STEP 5: Check for obvious errors
+npm run build  # Look for specific error messages
+
+# STEP 6: Revert to last working state
+git log --oneline -5  # Find last working commit
+git reset --hard [commit-hash-that-worked]
+npm install
+npm run dev
+```
+
+### 🚫 Level 2: Authentication Completely Broken
+
+#### Symptoms:
+- Login button doesn't work
+- NextAuth errors in console
+- Can't access any protected content
+
+#### Emergency Response:
+```bash
+# STEP 1: Check environment variables
+echo $NEXT_PUBLIC_MASTER_URL_KEY
+echo $DESCOPE_API
+echo $DESCOPE_CLIENT_ID
+
+# STEP 2: Verify NextAuth configuration
+# Check app/api/auth/[...nextauth]/route.js exists and is correct
+
+# STEP 3: Clear browser storage
+# In browser dev tools:
+# Application tab → Storage → Clear storage
+
+# STEP 4: Restart development server
+# Ctrl+C to stop, then npm run dev
+```
+
+#### If Still Failing:
+```bash
+# STEP 5: Revert auth-related changes
+git log --oneline --grep="auth"  # Find last auth change
+git revert [commit-hash]
+
+# STEP 6: Emergency auth bypass (development only)
+# Temporarily modify Header.jsx to skip auth check
+```
+
+### 🚫 Level 3: Database/API Completely Down
+
+#### Symptoms:
+- No data loading anywhere
+- GraphQL errors
+- Hygraph connection failing
+
+#### Emergency Response:
+```bash
+# STEP 1: Check Hygraph status
+# Visit status.hygraph.com
+
+# STEP 2: Test API endpoint manually
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"query":"query { categories { id name } }"}' \
+  https://api-us-east-1-shared-usea1-02.hygraph.com/v2/YOUR_KEY/master
+
+# STEP 3: Check environment variables
+echo $NEXT_PUBLIC_MASTER_URL_KEY
+
+# STEP 4: Verify GlobalApi.js hasn't been corrupted
+# Compare with last working version
+```
+
+#### If Still Failing:
+```bash
+# STEP 5: Use mock data temporarily
+# Create temporary mock data in components
+const mockData = [
+  { id: '1', name: 'Cleaning' },
+  { id: '2', name: 'Plumbing' }
+]
+```
+
+## 🛠️ Standard Recovery Procedures
+
+### 🔄 Procedure A: Complete Environment Reset
+
+**Use when:** Multiple things are broken, unclear what changed
+
+```bash
+# 1. Save current work (if any)
+git add .
+git commit -m "WIP: emergency save before reset"
+
+# 2. Find last known good commit
+git log --oneline -10
+# Look for commit messages like "working" or "deploy" or recent feature completion
+
+# 3. Create backup branch
+git checkout -b emergency-backup
+
+# 4. Reset to last good state
+git checkout main
+git reset --hard [last-good-commit]
+
+# 5. Clean install
+rm -rf node_modules
+rm package-lock.json
+npm install
+
+# 6. Test basic functionality
+npm run dev
+# Test: Home → Login → Category → Business → Booking
+```
+
+### 🔄 Procedure B: Selective Rollback
+
+**Use when:** Recent changes broke something specific
+
+```bash
+# 1. Identify what broke and when
+git log --oneline -5
+
+# 2. Find the problematic commit
+git diff HEAD~1 HEAD  # Compare with previous commit
+git diff HEAD~2 HEAD  # Compare with 2 commits ago
+
+# 3. Revert specific files
+git checkout HEAD~1 -- path/to/problematic/file
+
+# 4. Test the fix
+npm run dev
+```
+
+### 🔄 Procedure C: Emergency Component Isolation
+
+**Use when:** A specific component is causing crashes
+
+```bash
+# 1. Identify the problematic component
+# Check browser console for error stack trace
+
+# 2. Temporarily disable the component
+# Comment out the import and usage:
+// import ProblematicComponent from './ProblematicComponent'
+// <ProblematicComponent />
+
+# 3. Replace with placeholder
+<div>Component temporarily disabled for debugging</div>
+
+# 4. Test that app works without it
+npm run dev
+
+# 5. Fix the component in isolation
+# Uncomment and fix step by step
+```
+
+## 🎯 Emergency Decision Tree
+
+### When App Won't Start:
+```
+Is it a dependency issue?
+├─ YES → Run Procedure A (Complete Environment Reset)
+└─ NO → Check recent commits
+    ├─ Recent changes made → Run Procedure B (Selective Rollback)
+    └─ No recent changes → Check environment variables
+```
+
+### When Specific Feature Broken:
+```
+Is it authentication?
+├─ YES → Follow Level 2 Emergency Response
+└─ NO → Is it API/data related?
+    ├─ YES → Follow Level 3 Emergency Response
+    └─ NO → Run Procedure C (Component Isolation)
+```
+
+### When Everything is Broken:
+```
+Follow this order:
+1. Procedure A (Complete Environment Reset)
+2. If still broken → Check git history for last working deploy
+3. If still broken → Start fresh from backup/template
+```
+
+## 🆘 Emergency Contact Procedures
+
+### When You're Completely Stuck:
+
+#### 1. Document the Problem
+```markdown
+## Emergency Report
+- Date/Time: [timestamp]
+- What I was trying to do: [description]
+- What went wrong: [specific error]
+- What I've tried: [list of attempted fixes]
+- Current state: [can't start app / feature broken / etc.]
+- Last working commit: [commit hash if known]
+```
+
+#### 2. Create Emergency Branch
+```bash
+git checkout -b emergency-help-needed
+git add .
+git commit -m "HELP: [brief description of problem]"
+git push origin emergency-help-needed
+```
+
+#### 3. Preserve Evidence
+```bash
+# Save error logs
+npm run dev > error-log.txt 2>&1
+npm run build > build-error.txt 2>&1
+
+# Save current state
+git status > git-status.txt
+git log --oneline -10 > recent-commits.txt
+```
+
+## 🔧 Emergency Toolkit
+
+### Essential Commands for Emergencies:
+
+#### Quick Status Check:
+```bash
+# Check if basic setup is working
+node --version && npm --version
+ls -la package.json
+npm run dev --silent
+```
+
+#### Quick Rollback:
+```bash
+# Emergency rollback to previous commit
+git reset --hard HEAD~1
+npm install
+npm run dev
+```
+
+#### Quick Clean:
+```bash
+# Emergency clean install
+rm -rf node_modules package-lock.json
+npm install
+```
+
+#### Quick Test:
+```bash
+# Quick functionality test
+curl -I http://localhost:3000
+# Should return 200 OK if server is running
+```
+
+## 🚨 Prevention Strategies
+
+### Before Making Risky Changes:
+
+#### 1. Create Safety Branch:
+```bash
+git checkout -b safety-backup
+git checkout main
+git checkout -b feature/risky-change
+```
+
+#### 2. Test Current State:
+```bash
+npm run dev
+# Complete mandatory test flow
+# Document that everything works
+```
+
+#### 3. Make Small Changes:
+```bash
+# Don't change multiple files at once
+# Commit frequently with descriptive messages
+git add specific-file.js
+git commit -m "feat: small specific change"
+```
+
+### Regular Backup Routine:
+```bash
+# Daily backup of working state
+git tag daily-backup-$(date +%Y%m%d)
+git push origin --tags
+```
+
+## 🎛️ Emergency Environment Setup
+
+### When Starting Fresh:
+
+#### 1. Minimal Working Environment:
+```bash
+# Clone fresh repository
+git clone [repository-url]
+cd home-service-app-web
+
+# Install dependencies
+npm install
+
+# Create minimal .env.local
+cat > .env.local << EOF
+NEXT_PUBLIC_MASTER_URL_KEY=your_key_here
+DESCOPE_API=your_project_id
+DESCOPE_CLIENT_ID=your_client_id
+NEXTAUTH_SECRET=development_secret
+NEXTAUTH_URL=http://localhost:3000
+EOF
+
+# Test basic startup
+npm run dev
+```
+
+#### 2. Verify Core Functionality:
+```bash
+# Test checklist (must all pass):
+□ Home page loads
+□ Category list appears
+□ Business list appears
+□ Navigation works
+□ No console errors
+```
+
+## 🚦 Emergency Communication
+
+### Status Updates During Emergency:
+
+#### Every 30 Minutes, Document:
+```markdown
+## Emergency Status Update [Time]
+- Current situation: [brief status]
+- Actions taken: [what you've tried]
+- Next steps: [what you'll try next]
+- Help needed: [yes/no and what kind]
+```
+
+#### When Seeking Help:
+```markdown
+## Help Request
+- Problem: [clear description]
+- Environment: [OS, Node version, etc.]
+- Reproduction steps: [how to recreate issue]
+- Expected behavior: [what should happen]
+- Actual behavior: [what's happening instead]
+- Attachments: [error logs, screenshots]
+```
+
+## 🎯 Recovery Success Criteria
+
+### Emergency is Resolved When:
+```
+□ Application starts without errors (npm run dev)
+□ Home page loads in browser
+□ Authentication works (login/logout)
+□ Core user flow works (Home → Category → Business → Booking)
+□ No console errors visible
+□ Mobile view responds correctly
+□ Build process works (npm run build)
+```
+
+### Post-Emergency Actions:
+```bash
+# 1. Document what went wrong and how it was fixed
+# 2. Update this emergency protocol if needed
+# 3. Create prevention measures
+# 4. Test everything thoroughly
+# 5. Create new backup points
+```
+
+## 🛡️ Emergency Prevention Best Practices
+
+### Daily Safety Habits:
+1. **Commit working code frequently**
+2. **Test before committing**
+3. **Create backup branches before risky changes**
+4. **Document what you're changing and why**
+5. **Keep emergency protocols updated**
+
+### Weekly Safety Habits:
+1. **Create tagged backup points**
+2. **Test full deployment process**
+3. **Review and clean up branches**
+4. **Update documentation**
+5. **Test recovery procedures**
+
+Remember: **In emergencies, small careful steps are better than desperate big changes** 
