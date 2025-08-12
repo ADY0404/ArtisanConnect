@@ -1,0 +1,37 @@
+# render.yaml
+# Blueprint for deploying the ArtisanConnect web application on Render.
+
+services:
+  # Web service for the Next.js application
+  - type: web
+    name: artisan-connect-web
+    runtime: node
+    plan: free # Or 'starter' for a more performant option
+    
+    # === Build & Start Settings ===
+    # Command to install dependencies and build the Next.js app.
+    buildCommand: "npm install && npm run build"
+    
+    # Command to start the custom server for Next.js and Socket.IO.
+    startCommand: "node server.js"
+    
+    # === Health Check ===
+    # A basic health check to ensure the service is running.
+    healthCheckPath: /api/test-db # An endpoint that connects to your DB is a good health check
+
+    # === Environment Variables ===
+    # Secrets should be stored in an Environment Group on Render.
+    envVars:
+      - key: NODE_ENV
+        value: production
+        
+      # The NEXTAUTH_URL is automatically set from the service's public URL.
+      - key: NEXTAUTH_URL
+        fromService:
+          type: web
+          name: artisan-connect-web # Must match the 'name' of this service
+          property: url
+          
+      # All other secrets are loaded from an environment group.
+      # Create this group in the Render dashboard.
+      - fromGroup: artisan-connect-secrets 

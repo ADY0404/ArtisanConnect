@@ -1,0 +1,310 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 🏠 ArtisanConnect: Home Service Marketplace - Complete Project Story
+
+## 🎯 **Project Vision**
+**ArtisanConnect** is a comprehensive digital marketplace that bridges the gap between homeowners seeking quality services and skilled service providers looking to grow their business. Our platform creates a trusted ecosystem where convenience meets craftsmanship.
+
+---
+
+## 👥 **User Roles & Complete Journey Stories**
+
+### 🏠 **CUSTOMER (Homeowner) - "Sarah's Story"**
+
+**Background**: Sarah is a busy professional who owns a home and needs various services but struggles to find reliable, vetted service providers.
+
+#### **Complete Customer Journey:**
+
+**🔍 Discovery Phase:**
+- Sarah visits the homepage and sees featured service categories
+- She browses categories: Cleaning, Repair, Painting, Shifting, Plumbing, Electric
+- Uses advanced search filters: location, price range, ratings, availability
+- Views detailed business profiles with portfolios, certifications, and reviews
+
+**📋 Selection & Booking:**
+- Compares multiple service providers side-by-side
+- Reads authentic customer reviews and ratings
+- Views provider availability calendar
+- Selects preferred date/time slot
+- Books service with instant confirmation
+- Receives booking confirmation via email
+
+**💬 Communication:**
+- Uses in-app chat to discuss specific requirements
+- Shares photos/documents of the work needed
+- Receives updates from the service provider
+- Gets notifications about appointment reminders
+
+**💳 Payment & Service:**
+- Pays securely through integrated payment system (Stripe)
+- Tracks service provider arrival in real-time
+- Service is completed with quality assurance
+- Receives digital receipt and service warranty
+
+**⭐ Post-Service:**
+- Rates and reviews the service provider
+- Uploads before/after photos
+- Saves favorite providers for future bookings
+- Receives follow-up care tips and maintenance reminders
+
+**👤 Account Management:**
+- Views complete booking history
+- Manages payment methods and preferences
+- Sets up recurring services (weekly cleaning, monthly maintenance)
+- Refers friends and earns rewards
+
+---
+
+### 🔧 **SERVICE PROVIDER (Professional) - "Mike's Story"**
+
+**Background**: Mike is a skilled electrician who wants to grow his business beyond word-of-mouth referrals and reach more customers in his area.
+
+#### **Complete Provider Journey:**
+
+**📝 Registration & Setup:**
+- Creates detailed business profile with credentials
+- Uploads certifications, licenses, and insurance documents
+- Builds comprehensive service portfolio with photos
+- Sets service areas, pricing, and availability
+- Undergoes platform verification process
+
+**📊 Business Management:**
+- Accesses comprehensive dashboard with analytics
+- Views booking requests and manages calendar
+- Sets dynamic pricing based on demand/season
+- Manages service packages and promotions
+- Tracks revenue and performance metrics
+
+**📱 Customer Interaction:**
+- Receives instant notifications for new booking requests
+- Communicates with customers through secure chat
+- Shares progress updates and photos during work
+- Provides digital quotes and estimates
+- Manages customer expectations proactively
+
+**💼 Service Delivery:**
+- Uses mobile app for on-site work management
+- Captures before/after photos for documentation
+- Processes payments through integrated system
+- Issues digital invoices and receipts
+- Provides service warranties and guarantees
+
+**🌟 Growth & Marketing:**
+- Builds reputation through customer reviews
+- Showcases work in portfolio gallery
+- Participates in platform marketing campaigns
+- Accesses customer insights and feedback
+- Earns badges and certifications for excellence
+
+**💰 Financial Management:**
+- Tracks earnings and commission structure
+- Manages tax documentation and reporting
+- Sets up automatic payouts
+- Views detailed financial analytics
+- Plans business growth strategies
+
+---
+
+### 👑 **ADMIN (Platform Manager) - "Alex's Story"**
+
+**Background**: Alex manages the ArtisanConnect platform, ensuring quality, safety, and growth for both customers and service providers.
+
+#### **Complete Admin Journey:**
+
+**🎛️ Platform Oversight:**
+- Monitors overall platform health and performance
+- Reviews and approves new service provider applications
+- Manages content moderation and quality control
+- Handles dispute resolution between parties
+- Ensures compliance with local regulations
+
+**📊 Analytics & Insights:**
+- Tracks key performance indicators (KPIs)
+- Analyzes user behavior and platform usage
+- Monitors revenue streams and commission rates
+- Identifies growth opportunities and trends
+- Generates comprehensive business reports
+
+**👥 User Management:**
+- Manages user accounts and permissions
+- Handles customer support escalations
+- Processes refunds and payment disputes
+- Maintains provider verification standards
+- Implements user feedback improvements
+
+**🛡️ Quality Assurance:**
+- Reviews and moderates customer reviews
+- Investigates reported issues and complaints
+- Maintains service quality standards
+- Implements safety protocols and guidelines
+- Manages insurance and liability coverage
+
+**🚀 Platform Growth:**
+- Develops marketing strategies and campaigns
+- Manages partnerships with local businesses
+- Implements new features and improvements
+- Conducts market research and competitor analysis
+- Plans expansion to new service categories/regions
+
+---
+
+## 🔄 **Core App Capabilities & Features**
+
+### 🎨 **Frontend Features**
+
+#### **Public Pages:**
+- **Homepage**: Hero section, featured categories, top-rated providers
+- **Service Categories**: Browse by category with filtering options
+- **Provider Profiles**: Detailed business information, portfolios, reviews
+- **Search & Filter**: Advanced search with location, price, rating filters
+- **About Us**: Platform story, mission, and values
+
+#### **Customer Dashboard:**
+- **Booking Management**: Current, past, and upcoming bookings
+- **Payment History**: Transaction records and receipts
+- **Favorite Providers**: Saved preferred service providers
+- **Profile Settings**: Personal information and preferences
+- **Notification Center**: Updates, reminders, and messages
+
+#### **Provider Dashboard:**
+- **Business Profile**: Manage services, pricing, and availability
+- **Booking Calendar**: Schedule management and appointment tracking
+- **Customer Communications**: Chat system and messaging
+- **Financial Reports**: Earnings, analytics, and payout management
+- **Portfolio Management**: Showcase work and build reputation
+
+#### **Admin Dashboard:**
+- **User Management**: Customer and provider account oversight
+- **Content Moderation**: Review management and quality control
+- **Analytics Hub**: Platform performance and business metrics
+- **Financial Management**: Revenue tracking and commission oversight
+- **System Settings**: Platform configuration and feature toggles
+
+### 🔧 **Backend Capabilities**
+
+#### **Authentication & Security:**
+- **Multi-role Authentication**: Customer, Provider, Admin access levels
+- **JWT Token Management**: Secure session handling
+- **Password Security**: Bcrypt encryption and secure storage
+- **Role-based Access Control**: Feature access based on user type
+
+#### **Database Management:**
+- **MongoDB Integration**: Scalable user and session data storage
+- **Hygraph CMS**: Content management for services and categories
+- **Data Synchronization**: Real-time updates across platforms
+- **Backup & Recovery**: Automated data protection systems
+
+#### **API Integration:**
+- **Payment Processing**: Stripe integration for secure transactions
+- **Email Services**: SendGrid for notifications and communications
+- **File Storage**: Asset management for images and documents
+- **SMS Notifications**: Appointment reminders and updates
+
+#### **Real-time Features:**
+- **Live Chat System**: Socket.IO for instant messaging
+- **Push Notifications**: Real-time updates and alerts
+- **Calendar Synchronization**: Booking and availability management
+- **Location Services**: GPS tracking and service area mapping
+
+---
+
+## 🎯 **Key Success Metrics**
+
+### **Customer Success:**
+- Average booking completion rate > 95%
+- Customer satisfaction rating > 4.5/5
+- Repeat booking rate > 60%
+- Average response time < 2 hours
+
+### **Provider Success:**
+- Provider earnings growth > 25% annually
+- Service completion rate > 98%
+- Customer retention rate > 70%
+- Average provider rating > 4.3/5
+
+### **Platform Success:**
+- Monthly active users growth > 20%
+- Transaction volume growth > 30%
+- Platform commission revenue growth > 25%
+- Customer acquisition cost < $25
+
+---
+
+## 🚀 **Future Expansion Roadmap**
+
+### **Phase 1**: Core Marketplace (Current)
+- Basic booking and payment system
+- Provider profiles and customer reviews
+- Admin dashboard and user management
+
+### **Phase 2**: Enhanced Features
+- Real-time chat and notifications
+- Advanced search and AI recommendations
+- Mobile app development
+- Subscription services for regular maintenance
+
+### **Phase 3**: Market Expansion
+- Multi-city expansion
+- Corporate/commercial services
+- Franchise opportunities
+- International market entry
+
+### **Phase 4**: Innovation & Growth**
+- AI-powered service matching
+- IoT integration for smart home services
+- Augmented reality for service visualization
+- Blockchain-based reputation system
+
+---
+
+## 💡 **Unique Value Propositions**
+
+### **For Customers:**
+- **Trust & Safety**: Verified, insured, and rated service providers
+- **Convenience**: One-stop platform for all home service needs
+- **Transparency**: Clear pricing, reviews, and service guarantees
+- **Quality Assurance**: Platform-backed service quality standards
+
+### **For Service Providers:**
+- **Business Growth**: Access to larger customer base
+- **Professional Tools**: Complete business management platform
+- **Fair Pricing**: Transparent commission structure
+- **Marketing Support**: Platform-driven customer acquisition
+
+### **For the Platform:**
+- **Scalable Model**: Commission-based revenue with network effects
+- **Data Insights**: Rich analytics for continuous improvement
+- **Market Leadership**: First-mover advantage in local markets
+- **Community Building**: Trusted ecosystem of service excellence
+
+---
+
+## 🎓 **Academic Excellence Indicators**
+
+### **Technical Complexity:**
+- Full-stack development with modern technologies
+- Real-time features and payment integration
+- Multi-role authentication and authorization
+- Scalable architecture and database design
+
+### **Business Viability:**
+- Clear revenue model and market opportunity
+- Comprehensive user research and validation
+- Professional UI/UX design and user experience
+- Real-world applicability and market potential
+
+### **Innovation Factor:**
+- Unique approach to service provider verification
+- Advanced matching algorithms and recommendations
+- Integration of emerging technologies (AI, IoT)
+- Sustainable and scalable business model
+
+---
+
+**This story serves as our North Star - ensuring every feature we build serves these user journeys and business objectives. Every code decision should enhance one of these stories and move us closer to our vision of revolutionizing the home services industry.**
+
+
+🏆 **"Connecting Homes with Trusted Hands, One Service at a Time"** 
