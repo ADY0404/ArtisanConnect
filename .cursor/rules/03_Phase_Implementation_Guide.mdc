@@ -1,0 +1,409 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Phase-by-Phase Implementation Guide
+
+## 🎯 Implementation Sequence
+
+Based on the current state and plan.md, here's the exact sequence to follow:
+
+---
+
+## 📋 PHASE 2: Complete Frontend Development (Current Priority)
+
+### ✅ What's Done
+- Basic authentication with Descope
+- Home page with Hero, Categories, Business listings
+- Basic booking system
+- User booking history
+- Business detail pages
+- Category-based search
+
+### 🚧 What Needs Completion
+
+#### 2.1 Enhanced Search & Filters
+**File to create**: `app/(routes)/search/_components/SearchFilters.jsx`
+
+```jsx
+// Implementation pattern:
+"use client"
+import { useState } from 'react'
+import { Input } from '@/components/ui/input'
+
+function SearchFilters({ onFilterChange }) {
+  const [filters, setFilters] = useState({
+    location: '',
+    priceRange: { min: 0, max: 1000 },
+    rating: 0
+  })
+
+  // Follow existing component patterns
+  return (
+    <div className="p-4 border rounded-lg">
+      {/* Location filter */}
+      {/* Price range filter */}
+      {/* Rating filter */}
+    </div>
+  )
+}
+```
+
+**Integration Steps**:
+1. Add to existing search page
+2. Connect to API filtering
+3. Add to GlobalApi.js: `getBusinessWithFilters()`
+
+#### 2.2 Service Provider Profiles
+**Files to create**:
+- `app/(routes)/provider/[providerId]/page.jsx`
+- `app/(routes)/provider/_components/ProviderProfile.jsx`
+- `app/(routes)/provider/_components/ServicePortfolio.jsx`
+
+**New Hygraph Schema Needed**:
+```graphql
+type ServiceProvider {
+  id: ID!
+  name: String!
+  email: String!
+  phone: String
+  bio: String
+  experience: String
+  certifications: [String]
+  portfolio: [Asset]
+  rating: Float
+  totalReviews: Int
+  businessLists: [BusinessList]
+}
+```
+
+**Implementation Steps**:
+1. Update Hygraph schema
+2. Create provider profile components
+3. Add provider routes
+4. Update GlobalApi.js with provider methods
+
+#### 2.3 Rating & Review System
+**Files to create**:
+- `app/_components/RatingComponent.jsx`
+- `app/_components/ReviewList.jsx`
+- `app/_components/ReviewForm.jsx`
+
+**Hygraph Schema Addition**:
+```graphql
+type Review {
+  id: ID!
+  rating: Int!
+  comment: String
+  userName: String!
+  userEmail: String!
+  businessList: BusinessList!
+  createdAt: DateTime!
+}
+```
+
+**Implementation Steps**:
+1. Create review components
+2. Add review functionality to booking flow
+3. Display reviews on business details
+4. Add rating aggregation
+
+---
+
+## 🔧 PHASE 3: Backend Enhancement (Next Priority)
+
+### 3.1 MongoDB Integration
+**Purpose**: Enhanced data management, real-time features preparation
+
+**Setup Steps**:
+1. Install MongoDB dependencies:
+   ```bash
+   npm install mongodb mongoose
+   ```
+
+2. Create database connection:
+   ```javascript
+   // lib/mongodb.js
+   import mongoose from 'mongoose'
+   
+   const MONGODB_URI = process.env.MONGODB_URI
+   
+   if (!MONGODB_URI) {
+     throw new Error('Please define MONGODB_URI in .env.local')
+   }
+   ```
+
+3. Create Mongoose schemas:
+   ```javascript
+   // models/Chat.js
+   // models/Notification.js
+   // models/Analytics.js
+   ```
+
+**Migration Strategy**:
+- Keep Hygraph for content management
+- Use MongoDB for real-time data (chats, notifications)
+- Gradual migration approach
+
+### 3.2 Enhanced API Routes
+**Files to create**:
+- `app/api/bookings/route.js`
+- `app/api/reviews/route.js`
+- `app/api/providers/route.js`
+- `app/api/notifications/route.js`
+
+**Pattern to follow**:
+```javascript
+// app/api/bookings/route.js
+import { NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+
+export async function GET(request) {
+  try {
+    const session = await getServerSession()
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    
+    // Implementation
+    return NextResponse.json({ data })
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+}
+```
+
+---
+
+## 💬 PHASE 4: Real-time Features
+
+### 4.1 Chat System Implementation
+**Dependencies to install**:
+```bash
+npm install socket.io socket.io-client
+```
+
+**Files to create**:
+- `app/api/socket/route.js` (Socket.IO server)
+- `app/_components/ChatSystem.jsx`
+- `app/_components/ChatWindow.jsx`
+- `app/_components/MessageList.jsx`
+
+**Implementation Pattern**:
+```javascript
+// Context for chat
+"use client"
+import { createContext, useContext, useEffect, useState } from 'react'
+import io from 'socket.io-client'
+
+const SocketContext = createContext()
+
+export function SocketProvider({ children }) {
+  const [socket, setSocket] = useState(null)
+  
+  useEffect(() => {
+    const socketInstance = io()
+    setSocket(socketInstance)
+    
+    return () => socketInstance.close()
+  }, [])
+  
+  return (
+    <SocketContext.Provider value={socket}>
+      {children}
+    </SocketContext.Provider>
+  )
+}
+```
+
+### 4.2 Payment Integration
+**Dependencies**:
+```bash
+npm install @stripe/stripe-js stripe
+```
+
+**Files to create**:
+- `app/api/payments/create-intent/route.js`
+- `app/api/payments/webhook/route.js`
+- `app/_components/PaymentForm.jsx`
+- `app/_components/PaymentSuccess.jsx`
+
+**Implementation Steps**:
+1. Set up Stripe account and keys
+2. Create payment intents API
+3. Implement payment form component
+4. Add webhook for payment confirmation
+5. Update booking flow with payments
+
+### 4.3 Notification System
+**Files to create**:
+- `app/_services/NotificationService.js`
+- `app/_components/NotificationCenter.jsx`
+- `app/_components/NotificationToast.jsx`
+
+**Email Integration** (using SendGrid):
+```bash
+npm install @sendgrid/mail
+```
+
+---
+
+## 👑 PHASE 5: Admin Panel
+
+### 5.1 Admin Dashboard Structure
+**Files to create**:
+- `app/(routes)/admin/page.jsx`
+- `app/(routes)/admin/layout.jsx`
+- `app/(routes)/admin/_components/AdminNav.jsx`
+- `app/(routes)/admin/_components/Dashboard.jsx`
+
+**Admin Routes**:
+```
+admin/
+├── dashboard/         # Overview & analytics
+├── users/            # User management
+├── providers/        # Provider management
+├── bookings/         # Booking management
+├── reviews/          # Review moderation
+└── settings/         # System settings
+```
+
+### 5.2 Analytics Implementation
+**Dependencies**:
+```bash
+npm install recharts
+```
+
+**Components to create**:
+- `RevenueChart.jsx`
+- `UserGrowthChart.jsx`
+- `BookingTrends.jsx`
+- `ServiceAnalytics.jsx`
+
+---
+
+## 🧪 PHASE 6: Testing & Optimization
+
+### 6.1 Testing Setup
+**Dependencies**:
+```bash
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+npm install --save-dev cypress
+```
+
+**Test Structure**:
+```
+__tests__/
+├── components/       # Component unit tests
+├── pages/           # Page integration tests
+├── api/             # API route tests
+└── e2e/             # Cypress end-to-end tests
+```
+
+### 6.2 Performance Optimization
+**Tasks**:
+1. Image optimization review
+2. Bundle size analysis
+3. Core Web Vitals optimization
+4. SEO meta tags
+5. Server-side rendering optimization
+
+### 6.3 Production Deployment
+**Environment Setup**:
+```env
+# Production environment variables
+NEXTAUTH_URL=https://yourdomain.com
+MONGODB_URI=mongodb://production-connection
+STRIPE_SECRET_KEY=sk_live_...
+```
+
+---
+
+## 🔄 Implementation Workflow
+
+### For Each Feature Implementation:
+
+1. **Pre-Implementation**:
+   ```bash
+   git checkout -b feature/feature-name
+   ```
+
+2. **Development Cycle**:
+   - Read existing similar components
+   - Follow established patterns from `02_Development_Standards.md`
+   - Implement feature
+   - Test locally
+   - Check authentication integration
+
+3. **Testing Checklist**:
+   - [ ] Component renders without errors
+   - [ ] Authentication works correctly
+   - [ ] Mobile responsiveness verified
+   - [ ] Error states handled
+   - [ ] Loading states implemented
+
+4. **Integration**:
+   - Update GlobalApi.js if needed
+   - Update routing if new pages
+   - Test with existing features
+   - Verify no breaking changes
+
+5. **Commit & Deploy**:
+   ```bash
+   git add .
+   git commit -m "feat: implement feature-name"
+   git push origin feature/feature-name
+   ```
+
+---
+
+## 🎯 Weekly Milestones
+
+### Week 1: Complete Phase 2
+- [ ] Enhanced search filters
+- [ ] Provider profiles
+- [ ] Rating & review system
+
+### Week 2: Backend Enhancement
+- [ ] MongoDB setup
+- [ ] Enhanced API routes
+- [ ] Data migration
+
+### Week 3-4: Real-time Features
+- [ ] Chat system
+- [ ] Payment integration
+- [ ] Notification system
+
+### Week 5: Admin Panel
+- [ ] Admin dashboard
+- [ ] User management
+- [ ] Analytics
+
+### Week 6: Testing & Optimization
+- [ ] Test suite implementation
+- [ ] Performance optimization
+- [ ] Production deployment
+
+---
+
+## ⚠️ Critical Implementation Notes
+
+1. **Always maintain existing functionality**
+2. **Test authentication after each feature**
+3. **Follow mobile-first responsive design**
+4. **Implement error handling for all API calls**
+5. **Use loading states for better UX**
+6. **Keep Hygraph integration intact**
+7. **Follow established naming conventions**
+8. **Document complex features**
+
+## 🆘 When Things Go Wrong
+
+If implementation breaks existing features:
+1. Revert changes: `git reset --hard HEAD~1`
+2. Identify the breaking change
+3. Implement more carefully following established patterns
+4. Test thoroughly before proceeding
+
+Remember: **Incremental progress is better than breaking changes** 

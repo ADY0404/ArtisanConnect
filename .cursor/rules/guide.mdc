@@ -1,0 +1,60 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# AI Agent Framework for Home Service App Development
+
+## 🎯 Overview
+This framework provides comprehensive guidelines for an AI agent to build a complete home service marketplace application without losing context or introducing errors.
+
+## 📂 Framework Structure
+```
+AI_Agent_Framework/
+├── README.md (this file)
+├── 01_Current_State_Analysis.md
+├── 02_Development_Standards.md
+├── 03_Phase_Implementation_Guide.md
+├── 04_Error_Prevention_Strategies.md
+├── 05_Context_Management.md
+├── 06_Testing_Guidelines.md
+├── 07_Deployment_Instructions.md
+└── 08_Emergency_Protocols.md
+```
+
+## 🚀 Quick Start for AI Agent
+
+1. **ALWAYS START HERE**: Read `01_Current_State_Analysis.mdc` to understand what's already built
+2. **Follow Standards**: Strictly adhere to patterns in `02_Development_Standards.mdc`
+3. **Phase-by-Phase**: Implement features following `03_Phase_Implementation_Guide.mdc`
+4. **Error Prevention**: Apply strategies from `04_Error_Prevention_Strategies.mdc`
+5. **Maintain Context**: Use guidelines in `05_Context_Management.mdc`
+6. **Test Everything**: Follow protocols in `06_Testing_Guidelines.mdc`
+7. **Deploy Safely**: Use `07_Deployment_Instructions.mdc`
+
+## ⚠️ Critical Rules for AI Agent
+
+### MUST DO:
+- Read existing codebase before making ANY changes
+- Follow established patterns and naming conventions
+- Test each feature before moving to the next
+- Preserve all existing functionality
+- Document all changes
+
+### NEVER DO:
+- Break existing functionality
+- Change core architecture without documentation
+- Skip testing
+- Ignore TypeScript/JSX patterns
+- Hardcode sensitive data
+
+## 🎓 Project Context
+- **Student**: Final year project
+- **Tech Stack**: Next.js 14, React, Tailwind CSS, Hygraph CMS, NextAuth, MongoDB
+- **Domain**: Home Service Marketplace
+- **Timeline**: 9 weeks (as per plan.md)
+- **Current Status**: Phase 2 (Frontend Development) - Partially Complete
+
+## 📞 Support
+
+If any file is unclear or incomplete, refer to the detailed phase-by-phase guide and always maintain backward compatibility. 

@@ -1,0 +1,289 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Master AI Agent Development Guide
+NEVER EDIT A .env file just tell me what i should do to it 
+## 🎯 Project Overview
+
+**Project**: Home Service Marketplace Web Application  
+**Student**: Final Year Project  
+**Technology Stack**: Next.js 14, React, Tailwind CSS, Hygraph CMS, NextAuth, MongoDB  
+**Current Status**: Phase 2 (Frontend Development) - Partially Complete  
+**Timeline**: 9 weeks total  
+
+## 🚀 Quick Start Protocol for AI Agent
+
+### MANDATORY: Read Before ANY Development
+
+1. **FIRST** → Read `01_Current_State_Analysis.md` to understand what exists
+2. **SECOND** → Review `02_Development_Standards.md` for coding patterns
+3. **THIRD** → Test existing application functionality
+4. **FOURTH** → Follow `03_Phase_Implementation_Guide.md` for next steps
+
+### Critical Success Rules
+
+✅ **MUST DO**:
+- Test existing functionality before making changes
+- Follow established patterns exactly
+- Implement error handling for all features
+- Test on mobile devices
+- Commit working code frequently
+
+❌ **NEVER DO**:
+- Break existing authentication system
+- Modify GlobalApi.js existing functions
+- Skip testing after changes
+- Hardcode sensitive data
+- Make large changes without backup
+
+## 📋 Current Project Status
+
+### ✅ What's Working (DO NOT BREAK)
+- **Authentication**: NextAuth with Descope OAuth
+- **Home Page**: Hero section, category list, business list
+- **Navigation**: Header with login/logout, responsive design
+- **Business Listings**: Category-based search and filtering
+- **Booking System**: Create bookings, view booking history
+- **API Integration**: Hygraph CMS with GraphQL
+- **Responsive Design**: Mobile-friendly layouts
+
+### 🚧 What Needs Implementation
+- Enhanced search filters (location, price, rating)
+- Service provider profiles and portfolios
+- Rating and review system
+- Real-time chat system
+- Payment processing
+- Admin dashboard
+- Comprehensive testing
+- Production deployment
+
+## 🛣️ Development Roadmap
+
+### Phase 2 Completion (Week 1)
+**Priority**: Complete frontend features
+- [ ] Enhanced search filters
+- [ ] Provider profile pages
+- [ ] Rating & review system
+- [ ] Mobile optimization improvements
+
+### Phase 3: Backend Enhancement (Week 2)
+**Priority**: Prepare for advanced features
+- [ ] MongoDB integration setup
+- [ ] Enhanced API routes
+- [ ] Data migration strategy
+- [ ] Error handling improvements
+
+### Phase 4: Real-time Features (Weeks 3-4)
+**Priority**: Add interactive features
+- [ ] Socket.IO chat system
+- [ ] Stripe payment integration
+- [ ] Email notification system
+- [ ] Real-time booking updates
+
+### Phase 5: Admin & Analytics (Week 5)
+**Priority**: Management tools
+- [ ] Admin dashboard
+- [ ] User management system
+- [ ] Analytics and reporting
+- [ ] Content management tools
+
+### Phase 6: Testing & Deployment (Week 6)
+**Priority**: Production readiness
+- [ ] Comprehensive testing suite
+- [ ] Performance optimization
+- [ ] SEO implementation
+- [ ] Production deployment
+
+## 🔧 Development Workflow
+
+### For Every Feature Implementation:
+
+#### 1. Pre-Development (5 minutes)
+```bash
+# Create backup
+git checkout -b backup/before-[feature-name]
+git checkout main
+git checkout -b feature/[feature-name]
+
+# Test current state
+npm run dev
+# Complete mandatory test flow
+```
+
+#### 2. Development (Variable time)
+```bash
+# Read existing similar components
+# Follow established patterns
+# Implement feature incrementally
+# Test frequently during development
+```
+
+#### 3. Testing (10 minutes)
+```bash
+# Component renders without errors
+# Authentication integration works
+# Mobile responsiveness verified
+# Error states handled
+# Loading states implemented
+```
+
+#### 4. Integration (5 minutes)
+```bash
+# Update GlobalApi.js if needed
+# Test with existing features
+# Verify no breaking changes
+# Check console for errors
+```
+
+#### 5. Commit & Document (3 minutes)
+```bash
+git add .
+git commit -m "feat: implement [feature-name] - [what it does]"
+git push origin feature/[feature-name]
+```
+
+## 🧠 Context Management Strategy
+
+### Session Start Protocol
+1. **Review Recent Work**: Check last 3 commits and files modified
+2. **Test Application**: Verify existing functionality works
+3. **Read Context**: Review relevant framework documents
+4. **Plan Work**: Identify specific feature to implement
+5. **Create Safety Net**: Backup branch before starting
+
+### Session End Protocol
+1. **Test Changes**: Verify new functionality works
+2. **Test Existing**: Ensure nothing broke
+3. **Commit Work**: Descriptive commit messages
+4. **Document Progress**: Note what's complete and what's next
+5. **Clean Up**: Remove temporary files if any
+
+## 🎯 Quality Assurance
+
+### Definition of "Done" for Any Feature
+```
+□ Feature works on desktop and mobile
+□ Authentication properly integrated
+□ Error states display helpful messages
+□ Loading states provide user feedback
+□ Code follows established patterns
+□ No console errors or warnings
+□ Existing features remain functional
+□ Performance is acceptable
+□ Code is committed with clear messages
+```
+
+### Mandatory Testing After Every Change
+```
+□ Home page loads and displays content
+□ Login/logout functionality works
+□ Category browsing functions
+□ Business detail pages load
+□ Booking creation works
+□ User booking history displays
+□ Mobile view responsive
+□ No JavaScript errors in console
+```
+
+## 🚨 Red Flags - Stop Development Immediately
+
+### Critical Issues
+- Application won't start (`npm run dev` fails)
+- Authentication completely broken
+- Database/API connections failing
+- Build process failing (`npm run build` errors)
+- Console showing critical errors
+
+### When Red Flags Appear
+1. **STOP** making changes
+2. **REFER** to `08_Emergency_Protocols.md`
+3. **ROLLBACK** to last working state if needed
+4. **DOCUMENT** what went wrong
+5. **FIX** incrementally with small changes
+
+## 📚 Essential Documents Reference
+
+| Document | Purpose | When to Use |
+|----------|---------|-------------|
+| `01_Current_State_Analysis.md` | Understand existing codebase | Start of every session |
+| `02_Development_Standards.md` | Coding patterns and conventions | Before implementing features |
+| `03_Phase_Implementation_Guide.md` | Step-by-step feature development | Planning and implementing |
+| `04_Error_Prevention_Strategies.md` | Avoid common mistakes | Before risky changes |
+| `05_Context_Management.md` | Maintain development context | Session management |
+| `06_Testing_Guidelines.md` | Comprehensive testing protocols | After every change |
+| `07_Deployment_Instructions.md` | Production deployment | Final deployment |
+| `08_Emergency_Protocols.md` | Recovery from critical issues | When things go wrong |
+
+## 🔑 Success Metrics
+
+### Technical Success
+- All existing functionality preserved
+- New features work as specified
+- No critical bugs introduced
+- Performance remains acceptable
+- Code quality maintained
+
+### User Experience Success
+- Intuitive navigation
+- Fast loading times
+- Mobile-friendly design
+- Clear error messages
+- Responsive interactions
+
+### Project Success
+- Meets academic requirements
+- Demonstrates technical skills
+- Shows problem-solving ability
+- Has real-world applicability
+- Is deployable to production
+
+## 🎓 Academic Excellence Indicators
+
+### For Maximum Project Score
+- **Technical Complexity**: Implement real-time features, payment processing
+- **Code Quality**: Follow best practices, error handling, testing
+- **User Experience**: Professional UI/UX, mobile optimization
+- **Documentation**: Clear README, code comments, deployment guide
+- **Innovation**: Add unique features beyond basic requirements
+
+## 🏆 Final Success Checklist
+
+### Before Project Submission
+```
+□ All planned features implemented and working
+□ Comprehensive testing completed
+□ Production deployment successful
+□ Documentation complete and clear
+□ Code quality meets professional standards
+□ Performance optimized
+□ Security considerations addressed
+□ Mobile optimization verified
+□ User experience polished
+□ Demo preparation complete
+```
+
+## 🤝 Support and Escalation
+
+### When You Need Help
+1. **Document the Issue**: Use emergency report template
+2. **Preserve Current State**: Create help-needed branch
+3. **Gather Evidence**: Error logs, screenshots, reproduction steps
+4. **Escalate Properly**: Provide complete context and attempted solutions
+
+---
+
+## 💡 Final Words of Wisdom
+
+**For the AI Agent**: This project is more than code - it's a demonstration of professional software development skills. Every decision should consider maintainability, user experience, and real-world applicability.
+
+**For the Student**: Your success depends on methodical progress, thorough testing, and following professional development practices. Don't rush - quality over speed.
+
+**For the Future**: This application has the potential to be a real business. Build it with that level of care and professionalism.
+
+---
+
+**Remember**: Great software is built incrementally, tested thoroughly, and maintained carefully. Follow this framework, and you'll create something remarkable.
+
+🚀 **Ready to build the future of home services? Let's code!** 

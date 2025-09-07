@@ -1,0 +1,365 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Development Standards & Patterns
+
+## 🏗️ Architecture Principles
+
+### Follow Existing Patterns
+The codebase follows specific patterns that MUST be maintained:
+
+1. **App Router Structure** (Next.js 14)
+2. **Component-Based Architecture**
+3. **Service Layer Pattern**
+4. **GraphQL Integration via Hygraph**
+
+## 📁 File Organization Standards
+
+### Naming Conventions
+```
+✅ CORRECT:
+- Components: PascalCase (e.g., `BusinessList.jsx`, `CategoryList.jsx`)
+- Services: PascalCase with suffix (e.g., `GlobalApi.js`)
+- Routes: lowercase with hyphens (e.g., `mybooking`, `search`)
+- Utilities: camelCase (e.g., `utils.js`)
+
+❌ INCORRECT:
+- businesslist.jsx
+- global-api.js
+- MyBooking (for routes)
+```
+
+### Folder Structure Rules
+```
+app/
+├── _components/          # Prefix with underscore for components
+├── _services/           # Prefix with underscore for services
+├── (routes)/           # Parentheses for route groups
+│   ├── feature/
+│   │   ├── _components/ # Feature-specific components
+│   │   └── page.jsx    # Route page
+└── api/                # API routes
+```
+
+## ⚡ Component Standards
+
+### 1. Component Structure Template
+```jsx
+"use client" // Only if using hooks or client-side features
+import React, { useState, useEffect } from 'react'
+import { ComponentFromUI } from '@/components/ui/component'
+
+function ComponentName({ prop1, prop2 }) {
+  // State management
+  const [state, setState] = useState(defaultValue)
+
+  // Effects
+  useEffect(() => {
+    // Effect logic
+  }, [dependencies])
+
+  // Event handlers
+  const handleEvent = () => {
+    // Handler logic
+  }
+
+  // Render
+  return (
+    <div className="tailwind-classes">
+      {/* Component JSX */}
+    </div>
+  )
+}
+
+export default ComponentName
+```
+
+### 2. Props Pattern
+```jsx
+// Always destructure props in function signature
+function MyComponent({ title, items, onAction }) {
+  // Component logic
+}
+
+// NOT like this:
+function MyComponent(props) {
+  const { title, items } = props
+}
+```
+
+### 3. State Management Pattern
+```jsx
+// Use descriptive state names
+const [businessList, setBusinessList] = useState([])
+const [isLoading, setIsLoading] = useState(false)
+const [error, setError] = useState(null)
+
+// NOT generic names like:
+const [data, setData] = useState([])
+const [loading, setLoading] = useState(false)
+```
+
+## 🌐 API Integration Standards
+
+### 1. Service Layer Pattern
+All API calls MUST go through `GlobalApi.js`:
+
+```javascript
+// ✅ CORRECT: Add new functions to GlobalApi.js
+const getNewData = async (params) => {
+  const query = gql`
+    query GetData {
+      // GraphQL query
+    }
+  `
+  const result = await request(MASTER_URL, query)
+  return result
+}
+
+export default {
+  // ... existing functions
+  getNewData
+}
+```
+
+### 2. GraphQL Query Standards
+```javascript
+// ✅ Use descriptive query names
+const query = gql`
+  query GetBusinessByCategory {
+    businessLists(where: {category: {name: "${category}"}}) {
+      id
+      name
+      // ... fields
+    }
+  }
+`
+
+// ❌ NOT generic names
+const query = gql`
+  query MyQuery {
+    // ...
+  }
+`
+```
+
+### 3. Error Handling Pattern
+```jsx
+// ✅ Implement proper error handling
+const fetchData = async () => {
+  try {
+    setIsLoading(true)
+    setError(null)
+    const result = await GlobalApi.getData()
+    setData(result.data)
+  } catch (error) {
+    setError('Failed to fetch data. Please try again.')
+    console.error('API Error:', error)
+  } finally {
+    setIsLoading(false)
+  }
+}
+```
+
+## 🎨 UI/UX Standards
+
+### 1. Tailwind CSS Patterns
+```jsx
+// ✅ Follow existing spacing and styling patterns
+<div className="p-5 shadow-sm flex justify-between">
+  <div className="flex items-center gap-8">
+    <div className="md:flex items-center gap-6 hidden">
+      // Content
+    </div>
+  </div>
+</div>
+
+// ✅ Use hover effects consistently
+<h2 className="hover:scale-105 hover:text-primary cursor-pointer">
+  Menu Item
+</h2>
+```
+
+### 2. Responsive Design Pattern
+```jsx
+// ✅ Mobile-first approach
+<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  // Cards
+</div>
+
+// ✅ Hide/show elements responsively
+<div className="md:flex items-center gap-6 hidden">
+  // Desktop only content
+</div>
+```
+
+### 3. Component Library Usage
+```jsx
+// ✅ Use Radix UI components from components/ui
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+
+// ✅ Follow established button patterns
+<Button onClick={handleClick}>Action</Button>
+<Button variant="outline">Secondary Action</Button>
+```
+
+## 🔄 State Management Standards
+
+### 1. Local State Pattern
+```jsx
+// ✅ Use local state for component-specific data
+const [formData, setFormData] = useState({
+  name: '',
+  email: '',
+  date: ''
+})
+
+// ✅ Update state immutably
+setFormData(prev => ({
+  ...prev,
+  name: newName
+}))
+```
+
+### 2. Props Drilling vs Context
+```jsx
+// ✅ For deeply nested props, consider React Context
+// But follow existing patterns first
+
+// ✅ For now, pass props directly (existing pattern)
+<ChildComponent data={data} onUpdate={handleUpdate} />
+```
+
+## 🛣️ Routing Standards
+
+### 1. App Router Patterns
+```javascript
+// ✅ Dynamic routes
+app/(routes)/details/[businessId]/page.jsx
+
+// ✅ Route groups
+app/(routes)/search/[category]/page.jsx
+
+// ✅ Layout files
+app/(routes)/search/layout.jsx
+```
+
+### 2. Navigation Patterns
+```jsx
+// ✅ Use Next.js Link for internal navigation
+import Link from 'next/link'
+
+<Link href="/mybooking" className="navigation-classes">
+  My Bookings
+</Link>
+
+// ✅ Use router for programmatic navigation
+import { useRouter } from 'next/navigation'
+const router = useRouter()
+router.push('/path')
+```
+
+## 🔒 Security Standards
+
+### 1. Environment Variables
+```javascript
+// ✅ Use environment variables for sensitive data
+const API_URL = process.env.NEXT_PUBLIC_MASTER_URL_KEY
+
+// ❌ NEVER hardcode sensitive data
+const API_KEY = "hardcoded-key" // WRONG!
+```
+
+### 2. Authentication Patterns
+```jsx
+// ✅ Check authentication state
+const { data: session } = useSession()
+
+if (!session) {
+  return <LoginPrompt />
+}
+
+// ✅ Protect routes
+{session?.user ? <ProtectedContent /> : <PublicContent />}
+```
+
+## 📦 Import/Export Standards
+
+### 1. Import Order
+```javascript
+// ✅ Follow this order:
+// 1. React/Next.js
+import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+
+// 2. Third-party libraries
+import { useSession } from 'next-auth/react'
+
+// 3. UI components
+import { Button } from '@/components/ui/button'
+
+// 4. Local components/services
+import GlobalApi from '@/app/_services/GlobalApi'
+```
+
+### 2. Export Patterns
+```javascript
+// ✅ Default exports for components
+export default ComponentName
+
+// ✅ Named exports for utilities
+export { utility1, utility2 }
+```
+
+## 🧪 Code Quality Standards
+
+### 1. Code Comments
+```javascript
+/**
+ * Used to get All Business List
+ */
+const getAllBusinessList = () => {
+  // Implementation
+}
+
+// ✅ Document complex logic
+// Calculate available time slots excluding booked ones
+const availableSlots = allSlots.filter(slot => 
+  !bookedSlots.includes(slot)
+)
+```
+
+### 2. Console Logging
+```javascript
+// ✅ Use descriptive console logs during development
+console.log('User session data:', data)
+console.error('API Error:', error)
+
+// ❌ Remove or replace with proper logging in production
+console.log('test') // Remove this
+```
+
+## 🚨 Critical Rules - NEVER Break These
+
+1. **Never modify existing working components without testing**
+2. **Always follow the established file naming conventions**
+3. **Never hardcode API URLs or sensitive data**
+4. **Always use the GlobalApi service for API calls**
+5. **Never break the App Router structure**
+6. **Always test authentication flows after changes**
+7. **Never commit without basic functionality testing**
+
+## ✅ Pre-Implementation Checklist
+
+Before implementing any feature:
+- [ ] Read existing similar components
+- [ ] Follow established patterns
+- [ ] Plan file structure
+- [ ] Consider error states
+- [ ] Plan loading states
+- [ ] Consider mobile responsiveness
+- [ ] Test with existing auth system 

@@ -1,0 +1,385 @@
+# Context Management for AI Agent
+
+## 🧠 Maintaining Development Context
+
+### 1. **Session Memory Protocol**
+
+Before starting ANY task, ALWAYS review:
+
+#### Essential Context Files (Read in this order):
+1. `AI_Agent_Framework/01_Current_State_Analysis.md` - What's built
+2. `AI_Agent_Framework/02_Development_Standards.md` - How to build
+3. `plan.md` - Overall project vision
+4. Last 3 files you've modified - Recent changes
+
+#### Context Refresh Checklist:
+```bash
+# 1. Check current branch and commits
+git branch
+git log --oneline -5
+
+# 2. Verify app runs correctly
+npm run dev
+
+# 3. Test key functionality
+# Home -> Login -> Category -> Business -> Booking -> Logout
+```
+
+### 2. **Pattern Recognition System**
+
+#### When Implementing New Features:
+
+1. **Find Similar Existing Components**:
+   ```bash
+   # Search for similar patterns
+   find app/ -name "*.jsx" | grep -i "similar_feature"
+   
+   # Examples:
+   # For listings: Look at BusinessList.jsx, CategoryList.jsx
+   # For forms: Look at BookingSection.jsx
+   # For pages: Look at existing page.jsx files
+   ```
+
+2. **Study the Pattern**:
+   ```jsx
+   // Always analyze these aspects of existing components:
+   - How props are destructured
+   - State management pattern
+   - API call pattern
+   - Error handling approach
+   - Loading state implementation
+   - CSS classes used
+   - Import structure
+   ```
+
+3. **Replicate, Don't Reinvent**:
+   ```jsx
+   // ✅ Copy successful patterns
+   // ✅ Modify for your specific needs
+   // ❌ Don't create entirely new patterns
+   ```
+
+### 3. **Feature Interconnection Map**
+
+#### Understanding Dependencies:
+
+```mermaid
+graph TD
+    A[Authentication] --> B[Home Page]
+    A --> C[Booking System]
+    A --> D[User Profile]
+    
+    B --> E[Category List]
+    B --> F[Business List]
+    
+    E --> G[Category Search]
+    F --> H[Business Details]
+    
+    H --> C
+    C --> I[Booking History]
+    
+    J[GlobalApi] --> E
+    J --> F
+    J --> H
+    J --> C
+    J --> I
+```
+
+#### Before Modifying Any Component:
+```javascript
+// Ask yourself:
+1. What components use this?
+2. What API calls does this make?
+3. What authentication state does this need?
+4. What other features depend on this?
+5. What routes lead to/from this?
+```
+
+### 4. **State Management Context**
+
+#### Current Application State Flow:
+```jsx
+// Global State (via NextAuth)
+Session State → { user, email, image, expires }
+
+// Component State Patterns
+const [items, setItems] = useState([])          // Data arrays
+const [isLoading, setIsLoading] = useState(false) // Loading states
+const [error, setError] = useState(null)        // Error states
+
+// API State Flow
+Component → GlobalApi → Hygraph → Component
+```
+
+#### State Dependencies Map:
+```javascript
+// Home page depends on:
+- categoryList (from getCategory)
+- businessList (from getAllBusinessList)
+
+// Search page depends on:
+- category parameter (from URL)
+- filtered businessList (from getBusinessByCategory)
+
+// Business detail depends on:
+- businessId parameter (from URL)
+- business data (from getBusinessById)
+- booking slots (from BusinessBookedSlot)
+
+// Booking history depends on:
+- user session (from NextAuth)
+- bookings data (from GetUserBookingHistory)
+```
+
+### 5. **API Integration Context**
+
+#### Current API Architecture:
+```javascript
+// Single Source of Truth: GlobalApi.js
+MASTER_URL (Hygraph) → GraphQL Queries → Component State
+
+// Existing API Functions (NEVER MODIFY):
+- getCategory()
+- getAllBusinessList()
+- getBusinessByCategory(category)
+- getBusinessById(id)
+- createNewBooking(businessId, date, time, userEmail, userName)
+- BusinessBookedSlot(businessId, date)
+- GetUserBookingHistory(userEmail)
+- deleteBooking(bookingId) // Has bugs - needs fixing
+```
+
+#### When Adding New API Functions:
+```javascript
+// ✅ ALWAYS follow this pattern:
+const newFunction = async (params) => {
+  const query = gql`
+    query DescriptiveName {
+      // GraphQL query following existing patterns
+    }
+  `
+  const result = await request(MASTER_URL, query)
+  return result
+}
+
+// ✅ Add to export at bottom:
+export default {
+  // ALL existing functions (copy exactly)
+  getCategory,
+  getAllBusinessList,
+  // ... etc
+  
+  // New function
+  newFunction
+}
+```
+
+### 6. **Route Context Awareness**
+
+#### Current Routing Structure:
+```
+app/
+├── page.js (Home)
+├── (routes)/
+│   ├── details/[businessId]/page.jsx
+│   ├── mybooking/page.jsx
+│   └── search/[category]/page.jsx
+```
+
+#### Navigation Patterns:
+```jsx
+// Internal navigation ALWAYS uses:
+import Link from 'next/link'
+<Link href="/path">Text</Link>
+
+// Programmatic navigation:
+import { useRouter } from 'next/navigation'
+const router = useRouter()
+router.push('/path')
+```
+
+### 7. **Authentication Context Preservation**
+
+#### How Authentication Currently Works:
+```jsx
+// 1. NextAuth with Descope provider
+// 2. Session management in provider.js
+// 3. Session access in components:
+
+const { data: session } = useSession()
+
+// 4. User data structure:
+session = {
+  user: {
+    email: "user@email.com",
+    image: "profile_image_url",
+    name: "User Name"
+  },
+  expires: "2024-12-31T23:59:59.999Z"
+}
+```
+
+#### Authentication Integration Checklist:
+```jsx
+// For any new component, verify:
+1. Is "use client" directive added? (if using useSession)
+2. Is session status handled? (loading, authenticated, unauthenticated)
+3. Are protected actions guarded? (only for authenticated users)
+4. Is user email used correctly for API calls?
+5. Is login/logout flow preserved?
+```
+
+### 8. **Error Context Tracking**
+
+#### Common Error Patterns to Watch:
+```javascript
+// 1. GraphQL Query Errors
+- Typos in field names
+- Missing variables in queries
+- Incorrect data structure assumptions
+
+// 2. Authentication Errors
+- Missing session checks
+- Incorrect user email usage
+- Protected route access
+
+// 3. State Management Errors
+- Infinite re-renders (missing useEffect dependencies)
+- State not updating (incorrect state setter usage)
+- Memory leaks (not cleaning up useEffect)
+
+// 4. Routing Errors
+- Incorrect Link href paths
+- Missing dynamic route parameters
+- Breaking existing navigation
+```
+
+### 9. **UI/UX Context Consistency**
+
+#### Design System Context:
+```jsx
+// Color Scheme (from existing components):
+- primary: Used for hover states, active elements
+- Background: Clean white/light themes
+- Shadows: shadow-sm for cards and containers
+- Gaps: gap-6, gap-8 for spacing
+- Padding: p-5 for containers, p-4 for smaller elements
+
+// Typography Patterns:
+- Hover effects: hover:scale-105 hover:text-primary
+- Responsive visibility: md:flex hidden (desktop only)
+- Grid layouts: grid-cols-2 md:grid-cols-3 lg:grid-cols-4
+```
+
+#### Component Consistency Rules:
+```jsx
+// ✅ ALWAYS match existing component patterns:
+1. Same prop destructuring style
+2. Same state management approach
+3. Same error handling pattern
+4. Same loading state implementation
+5. Same responsive design approach
+6. Same CSS class patterns
+```
+
+### 10. **Development Progress Tracking**
+
+#### Session Documentation Template:
+```markdown
+## Development Session [Date]
+
+### Context Reviewed:
+- [ ] Current state analysis
+- [ ] Development standards
+- [ ] Recent commits
+- [ ] Application functionality test
+
+### Task: [Feature Name]
+
+### Files Modified:
+- file1.jsx - [description]
+- file2.js - [description]
+
+### Testing Completed:
+- [ ] Component renders correctly
+- [ ] Authentication works
+- [ ] Mobile responsive
+- [ ] No console errors
+- [ ] Existing features unaffected
+
+### Next Session Context:
+- Current status: [In progress/Complete/Blocked]
+- Next steps: [What to do next]
+- Considerations: [Important notes for next session]
+```
+
+### 11. **Context Recovery Protocol**
+
+#### If You Lose Context Mid-Development:
+
+1. **Stop Coding Immediately**
+2. **Run Context Recovery**:
+   ```bash
+   # Check what you were working on
+   git status
+   git diff
+   
+   # Test current state
+   npm run dev
+   # Navigate through app to verify functionality
+   
+   # Review recent changes
+   git log --oneline -3
+   ```
+
+3. **Re-establish Context**:
+   - Read relevant framework documents
+   - Understand the current task from git commits
+   - Test existing functionality
+   - Identify what was being implemented
+
+4. **Resume Safely**:
+   - Continue with small, incremental changes
+   - Test frequently
+   - Document progress
+
+### 12. **Cross-Session Context Preservation**
+
+#### Before Ending a Development Session:
+```bash
+# 1. Commit work with descriptive messages
+git add .
+git commit -m "feat: partial implementation of [feature] - [what's done]"
+
+# 2. Document current state
+# Update progress in this context management file or comments
+
+# 3. Note next steps
+# Leave clear comments about what to do next
+```
+
+#### Starting a New Development Session:
+```bash
+# 1. Pull latest changes
+git pull origin main
+
+# 2. Review last commits
+git log --oneline -5
+
+# 3. Test application
+npm run dev
+
+# 4. Read context files
+# Review framework documents and progress notes
+```
+
+## 🎯 Context Preservation Rules
+
+1. **Never start coding without reviewing context**
+2. **Always test existing functionality before making changes**
+3. **Document your understanding before proceeding**
+4. **Make small, incremental changes**
+5. **Test frequently to maintain context**
+6. **Leave clear notes for the next session**
+
+Remember: **Context is everything in complex development projects** 

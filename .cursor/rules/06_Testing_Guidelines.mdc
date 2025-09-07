@@ -1,0 +1,454 @@
+# Testing Guidelines
+
+## 🧪 Testing Philosophy
+
+**Rule #1**: Every feature must be tested before marking as complete
+**Rule #2**: Test existing functionality after every change
+**Rule #3**: Mobile-first testing approach
+
+## 🚀 Quick Testing Protocol
+
+### Before Every Commit:
+```bash
+# 1. Start development server
+npm run dev
+
+# 2. Execute Mandatory Test Flow (5 minutes)
+```
+
+### Mandatory Test Flow Checklist:
+```
+□ Home page loads without errors
+□ Login button works
+□ Login with Descope works
+□ Category list displays
+□ Business list displays
+□ Click on category → search page works
+□ Click on business → detail page works
+□ Booking form works (if logged in)
+□ My Bookings page shows data (if logged in)
+□ Logout works
+□ Mobile view responsive
+```
+
+## 📱 Device Testing Requirements
+
+### Test on These Viewport Sizes:
+```javascript
+// Mobile
+- iPhone SE (375px)
+- iPhone 13 (390px)
+
+// Tablet  
+- iPad (768px)
+
+// Desktop
+- Laptop (1024px)
+- Desktop (1440px)
+```
+
+### Responsive Testing Checklist:
+```
+□ Navigation collapses properly on mobile
+□ Components stack vertically on small screens
+□ Text remains readable on all sizes
+□ Buttons are touch-friendly (44px minimum)
+□ Images scale properly
+□ No horizontal scrolling
+□ Grid layouts respond correctly
+```
+
+## 🎯 Component Testing Framework
+
+### For Each New Component:
+
+#### 1. **Basic Rendering Test**
+```jsx
+// Manual test: Does component render without crashing?
+□ Component displays without console errors
+□ Props are received correctly
+□ Default states show properly
+```
+
+#### 2. **State Management Test**
+```jsx
+// For components with state:
+□ Initial state is correct
+□ State updates work
+□ Event handlers function properly
+□ State doesn't cause infinite re-renders
+```
+
+#### 3. **API Integration Test**
+```jsx
+// For components using GlobalApi:
+□ Loading state displays
+□ Success state shows data
+□ Error state displays properly
+□ Empty state handles gracefully
+```
+
+#### 4. **Authentication Test**
+```jsx
+// For components using useSession:
+□ Authenticated state works
+□ Unauthenticated state works
+□ Loading state handled
+□ Protected actions require login
+```
+
+## 🔄 Integration Testing
+
+### Feature Integration Checklist:
+
+#### 1. **Navigation Flow Testing**
+```
+Test Path: Home → Category → Business → Booking → History
+□ All links work correctly
+□ Back button functions
+□ URL parameters passed correctly
+□ Page refreshes work
+□ Authentication persists across navigation
+```
+
+#### 2. **Data Flow Testing**
+```
+□ Category selection filters businesses
+□ Business details load correctly
+□ Booking saves to user history
+□ User history displays all bookings
+□ Data persists after page refresh
+```
+
+#### 3. **Authentication Flow Testing**
+```
+□ Unauthenticated user sees login prompt
+□ Login redirects to intended page
+□ Authenticated user sees protected content
+□ Logout clears session completely
+□ Session expiry handled gracefully
+```
+
+## 🚨 Error State Testing
+
+### Required Error Scenarios:
+
+#### 1. **Network Error Testing**
+```javascript
+// Simulate these conditions:
+□ No internet connection
+□ Slow network (throttling)
+□ API server down
+□ GraphQL query errors
+□ Timeout errors
+```
+
+#### 2. **Authentication Error Testing**
+```javascript
+□ Login failure
+□ Session expired
+□ Invalid token
+□ Permission denied
+```
+
+#### 3. **Data Error Testing**
+```javascript
+□ Empty API responses
+□ Malformed data
+□ Missing required fields
+□ Large datasets
+□ Special characters in data
+```
+
+## 📊 Performance Testing
+
+### Performance Checklist:
+```
+□ Page load time < 3 seconds
+□ Images load efficiently
+□ No unnecessary re-renders
+□ API calls not duplicated
+□ Memory usage stable
+□ No console warnings
+```
+
+### Performance Testing Tools:
+```bash
+# Lighthouse audit
+# Chrome DevTools Performance tab
+# Network throttling
+# Memory profiling
+```
+
+## 🔧 Browser Testing
+
+### Required Browser Support:
+```
+□ Chrome (latest)
+□ Firefox (latest)
+□ Safari (latest)
+□ Edge (latest)
+□ Mobile Safari (iOS)
+□ Mobile Chrome (Android)
+```
+
+### Browser-Specific Tests:
+```
+□ NextAuth login works in all browsers
+□ Local storage persists
+□ Session cookies work
+□ Image optimization works
+□ CSS grid/flexbox support
+```
+
+## 🧩 API Testing
+
+### GlobalApi Function Testing:
+
+#### For Each API Function:
+```javascript
+// Test with valid data
+□ Function returns expected structure
+□ GraphQL query executes successfully
+□ Data matches expected format
+
+// Test with edge cases
+□ Empty parameters
+□ Invalid parameters
+□ Non-existent IDs
+□ Special characters
+□ Large datasets
+```
+
+#### API Error Handling:
+```javascript
+□ Network errors caught and handled
+□ GraphQL errors provide meaningful messages
+□ Timeout scenarios handled
+□ Rate limiting handled gracefully
+□ Invalid responses handled
+```
+
+## 🏗️ Build Testing
+
+### Production Build Testing:
+```bash
+# 1. Build the application
+npm run build
+
+# 2. Test build output
+npm run start
+
+# 3. Verify production behavior
+□ All pages load correctly
+□ Static assets serve properly
+□ Environment variables work
+□ API connections work
+□ Authentication works in production mode
+```
+
+### Environment Testing:
+```bash
+# Test different environments
+□ Development (npm run dev)
+□ Production build (npm run build && npm run start)
+□ Deployment environment
+```
+
+## 📝 Manual Testing Scripts
+
+### Quick Smoke Test (3 minutes):
+```
+1. Open app in browser
+2. Verify home page loads
+3. Click login, verify it works
+4. Click a category, verify search works
+5. Click a business, verify details load
+6. Click logout, verify it works
+```
+
+### Full Feature Test (15 minutes):
+```
+1. Complete smoke test
+2. Test all navigation links
+3. Test booking flow end-to-end
+4. Test responsive design on mobile
+5. Test error states (network off)
+6. Test different user scenarios
+```
+
+### User Journey Testing:
+```
+Customer Journey:
+1. Land on homepage
+2. Browse categories
+3. Select service type
+4. View business details
+5. Book appointment
+6. View booking history
+7. Logout
+
+Provider Journey (when implemented):
+1. Login as provider
+2. View dashboard
+3. Manage services
+4. View bookings
+5. Update availability
+```
+
+## 🐛 Bug Testing Scenarios
+
+### Common Bug Patterns to Test:
+
+#### 1. **State Synchronization Bugs**
+```
+□ Data refresh after booking
+□ Category switching
+□ User session changes
+□ Multiple tab behavior
+```
+
+#### 2. **Timing Bugs**
+```
+□ Fast clicking buttons
+□ Quick navigation
+□ API calls overlapping
+□ Component unmounting during API calls
+```
+
+#### 3. **Edge Case Bugs**
+```
+□ Empty search results
+□ All categories selected
+□ Invalid business IDs
+□ Expired sessions
+□ Network reconnection
+```
+
+## 🎯 Testing Automation Setup
+
+### When to Add Automated Tests:
+
+After implementing major features, add:
+
+#### 1. **Unit Tests** (Jest + React Testing Library)
+```bash
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+```
+
+#### 2. **Integration Tests** (Cypress)
+```bash
+npm install --save-dev cypress
+```
+
+#### 3. **Test Structure**:
+```
+__tests__/
+├── components/
+│   ├── Header.test.jsx
+│   ├── BusinessList.test.jsx
+│   └── CategoryList.test.jsx
+├── pages/
+│   ├── home.test.jsx
+│   └── booking.test.jsx
+├── api/
+│   └── GlobalApi.test.js
+└── e2e/
+    ├── booking-flow.cy.js
+    └── authentication.cy.js
+```
+
+## 🔍 Testing Tools & Setup
+
+### Required Dev Dependencies:
+```json
+{
+  "jest": "^29.5.0",
+  "@testing-library/react": "^13.4.0",
+  "@testing-library/jest-dom": "^5.16.5",
+  "cypress": "^12.17.0"
+}
+```
+
+### Jest Configuration:
+```javascript
+// jest.config.js
+const nextJest = require('next/jest')
+
+const createJestConfig = nextJest({
+  dir: './',
+})
+
+const customJestConfig = {
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  moduleDirectories: ['node_modules', '<rootDir>/'],
+  testEnvironment: 'jest-environment-jsdom',
+}
+
+module.exports = createJestConfig(customJestConfig)
+```
+
+## ⚠️ Testing Red Flags
+
+### Stop Development If:
+```
+❌ Home page doesn't load
+❌ Login/logout broken
+❌ Console shows authentication errors
+❌ API calls failing
+❌ Mobile view completely broken
+❌ Build process fails
+❌ TypeScript/JavaScript errors
+```
+
+### Warning Signs:
+```
+⚠️ Slow page loads (>5 seconds)
+⚠️ Console warnings
+⚠️ Inconsistent mobile behavior
+⚠️ Memory leaks
+⚠️ Network request errors
+⚠️ State synchronization issues
+```
+
+## 🎉 Testing Success Criteria
+
+### Feature Completion Checklist:
+```
+□ All device sizes work
+□ All browsers work
+□ All user flows work
+□ Error states handled
+□ Loading states present
+□ Performance acceptable
+□ No console errors
+□ Authentication integrated
+□ Mobile optimized
+□ Accessible UI
+```
+
+### Definition of Done:
+```
+A feature is complete when:
+1. It works on all required devices
+2. It handles all error cases
+3. It integrates with authentication
+4. It follows existing patterns
+5. It doesn't break existing features
+6. It performs well
+7. It's been manually tested
+8. It's ready for production
+```
+
+## 🚀 Testing Workflow Integration
+
+### Daily Testing Routine:
+```
+1. Morning: Quick smoke test
+2. After each feature: Full feature test
+3. Before commit: Integration test
+4. End of day: Cross-browser test
+5. Before deployment: Production test
+```
+
+Remember: **Testing is not optional - it's what separates working software from broken demos** 
